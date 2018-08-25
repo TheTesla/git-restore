@@ -9,6 +9,6 @@ pathlenbackup=${#realpathbackup}
 for d in $(find $1 -name '.git'); do
     remotepath=${d:$((pathlenbackup+1)):-5}
     echo "Restoring $realpathbackup/$remotepath -> $remotepath"
-    $HERE/restore.bash "$remotepath" "$realpathbackup"
+    $HERE/restore.bash "$remotepath" "$realpathbackup" $2
 done
 

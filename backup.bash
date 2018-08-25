@@ -8,7 +8,12 @@ mkdir remote
 sshfs $1 remote
 git add -A
 git commit -am "Backup of $1 on $(date)"
-git tag "backup-$(date +%Y%m%d%k%M%S)"
+tag="backup-$(date +%Y%m%d%k%M%S)"
+if [ "$#" -eq 3 ] ; then
+  tag=$3
+fi
+echo "set tag: $tag"
+git tag $tag
 until fusermount -u remote
 do
   sleep 1
