@@ -39,4 +39,8 @@ and restored the tagged version:
 
 Stefan Helmert
 
+## License
+
+AGPL v3
+
 
