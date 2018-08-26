@@ -16,16 +16,16 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# $1 remote
-# $2 local
-# $3 database login
+# $1 remote 
+# $2 database login
 
-HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+remotehost=$(echo $1 | cut -d':' -f1)
+remotedir=$(echo $1 | cut -d':' -f2)
+dbuser=$(echo $2 | cut -d':' -f1)
+dbpasswd=$(echo $2 | cut -d':' -f2)
 
-mkdir -p "$2/$1"
-cd "$2/$1"
-echo $3 > .mysql
-chmod 0600 .mysql
+ssh "$remotehost" /bin/bash << EOF
+  nohup mysql -u $dbuser -p$dbpasswd < mysql-backup.sql 2>mysql-restore.err
+EOF
 
-$HERE/init.bash $1 $2 $3
 

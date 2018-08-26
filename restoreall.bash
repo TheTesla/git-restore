@@ -23,7 +23,9 @@ realpathbackup=$(realpath $1)
 pathlenbackup=${#realpathbackup}
 for d in $(find $1 -name '.git'); do
     remotepath=${d:$((pathlenbackup+1)):-5}
-    echo "Restoring $realpathbackup/$remotepath -> $remotepath"
+    echo "Restoring        $realpathbackup/$remotepath -> $remotepath"
     $HERE/restore.bash "$remotepath" "$realpathbackup" $2
 done
+
+$HERE/restoreall-mysql.bash $1
 

@@ -16,16 +16,15 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# $1 remote
-# $2 local
-# $3 database login
-
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-mkdir -p "$2/$1"
-cd "$2/$1"
-echo $3 > .mysql
-chmod 0600 .mysql
+cd "$1"
+realpathbackup=$(realpath $1)
+pathlenbackup=${#realpathbackup}
+for d in $(find $1 -name '.mysql'); do
+    remotepath=${d:$((pathlenbackup+1)):-7}
+    echo "Restoring mysql  $remotepath -> mysql"
+    $HERE/restore-mysql.bash "$remotepath" "$(< $realpathbackup/$remotepath/.mysql)"
+done
 
-$HERE/init.bash $1 $2 $3
 

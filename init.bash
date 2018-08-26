@@ -16,6 +16,9 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# $1 remote
+# $2 local
+
 export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 mkdir -p "$2/$1"
 cd "$2/$1"

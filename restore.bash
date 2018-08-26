@@ -24,12 +24,10 @@ tag="master"
 if [ "$#" -eq 3 ] ; then
   tag=$3
 fi
-echo "checkout $tag"
-git checkout $tag -f
-until fusermount -u remote
+git checkout $tag -f 2>/dev/null
+until fusermount -u remote 2>/dev/null
 do
   sleep 1
 done
 rmdir remote
-echo "Restore done."
 
