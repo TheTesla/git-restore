@@ -16,21 +16,16 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+# $1 remote 
+# $2 database login
 
-$HERE/backupall-mysql.bash $1
+remotehost=$(echo $1 | cut -d':' -f1)
+remotedir=$(echo $1 | cut -d':' -f2)
+dbuser=$(echo $2 | cut -d':' -f1)
+dbpasswd=$(echo $2 | cut -d':' -f2)
 
-tag="backup-$(date +%Y%m%d%k%M%S)"
-if [ "$#" -eq 2 ] ; then
-  tag=$2
-fi
-
-cd "$1"
-realpathbackup=$(realpath $1)
-pathlenbackup=${#realpathbackup}
-for d in $(find $1 -name '.git'); do
-    remotepath=${d:$((pathlenbackup+1)):-5}
-    echo "Backup        $remotepath -> $realpathbackup/$remotepath"
-    $HERE/backup.bash "$remotepath" "$realpathbackup" $tag
-done
+ssh "$remotehost" /bin/bash << EOF
+  mkdir -p $remotedir
+  nohup mysqldump -u $dbuser -p$dbpasswd --all-databases > mysql-backup.sql 2>mysql-backup.err
+EOF
 
